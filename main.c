@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 int main() {
-    int n, item_no, q, no_items;
-    float p, bill, t_b = 0, total_income = 0;
-    int total_items_sold = 0;
-    int item_count[5] = {0};
+    int c, ino, qty, items;
+    float price, bill, tb = 0, income = 0;
+    int total_qty = 0;
+    int count[5] = {0};
 
     printf("========== Cafe Order Management System ==========\n\n");
     printf("Item No.\tItem Name\tPrice\n");
@@ -14,70 +14,71 @@ int main() {
     printf("4.\t\tBurger\t\t120\n");
     printf("5.\t\tPastry\t\t60\n\n");
 
-    printf("Enter total number of customers: ");
-    scanf("%d", &n);
+    printf("Enter total customers: ");
+    scanf("%d", &c);
 
-    if (n > 10) {
-        printf("---- Max capacity is only 10 members. Please try again. ----\n");
+    if (c > 10) {
+        printf("---- Max capacity is 10 customers ----\n");
         return 0;
     }
 
-    for (int i = 1; i <= n; i++) {
-        t_b = 0;
+    for (int i = 1; i <= c; i++) {
+        tb = 0;
         printf("\n--- Customer %d ---\n", i);
-
         printf("Enter number of items: ");
-        scanf("%d", &no_items);
+        scanf("%d", &items);
 
-        printf("Enter item number:\n");
-        scanf(" %d", &item_no);
-        if (item_no>5 || item_no<1)
-        {
-            printf("---invalid input---");
-            return 0 ;
-        }
-        else
-        {
-        printf("Enter Quantity ::");
-        scanf("%d", &q);
-        
-            switch (item_no) {
-                case 1: p = 50; break;
-                case 2: p = 30; break;
-                case 3: p = 80; break;
-                case 4: p = 120; break;
-                case 5: p = 60; break;
-                default:
-                    printf("Invalid item number! Skipping...\n");
-                    continue;
+        int j = 1;
+        while (j <= items) {
+            printf("Enter item number: ");
+            scanf("%d", &ino);
+
+            if (ino < 1 || ino > 5) {
+                printf("--- Invalid item number ---\n");
+                return 0;
             }
 
-            bill = p * q;
-            t_b += bill;
-            total_items_sold += q;
-            item_count[item_no - 1] += q;
+            printf("Enter quantity: ");
+            scanf("%d", &qty);
+
+            if (ino == 1)
+                price = 50;
+            else if (ino == 2)
+                price = 30;
+            else if (ino == 3)
+                price = 80;
+            else if (ino == 4)
+                price = 120;
+            else
+                price = 60;
+
+            bill = price * qty;
+            tb += bill;
+            total_qty += qty;
+            count[ino - 1] += qty;
+
+            j++;
         }
 
-        printf("Total Bill for Customer %d: %.0f\n", i, t_b);
-        total_income += t_b;
+        printf("Total Bill for Customer %d: %.0f\n", i, tb);
+        income += tb;
     }
 
-    // Find most and least ordered items
-    int max_idx = 0, min_idx = 0;
+    int max = 0, min = 0;
     for (int i = 1; i < 5; i++) {
-        if (item_count[i] > item_count[max_idx])
-            max_idx = i;
-        if (item_count[i] < item_count[min_idx])
-            min_idx = i;
+        if (count[i] > count[max])
+            max = i;
+        if (count[i] < count[min])
+            min = i;
     }
 
-    char *items[] = {"Coffee", "Tea", "Sandwich", "Burger", "Pastry"};
+    char *item_name[] = {"Coffee", "Tea", "Sandwich", "Burger", "Pastry"};
 
     printf("\n========== Cafe Summary ==========\n");
-    printf("Total Revenue: %.0f\n", total_income);
-    printf("Total Items Sold: %d\n", total_items_sold);
-    printf("Most Ordered Item: %s\n", items[max_idx]);
-    printf("Least Ordered Item: %s\n", items[min_idx]);
+    printf("Total Revenue: %.0f\n", income);
+    printf("Total Items Sold: %d\n", total_qty);
+    printf("Most Ordered Item: %s\n", item_name[max]);
+    printf("Least Ordered Item: %s\n", item_name[min]);
     printf("==================================\n");
 
     return 0;
